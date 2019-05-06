@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
+#what is after =, decode it first online
+template = """ """
 
 def get_fact():
 
@@ -16,10 +18,26 @@ def get_fact():
 
     return facts[0].getText()
 
+def pig_latin_translator(fact):
+    #analyze network traffice
+    payload = {"input_text": fact}
+    print(f"payload is {payload}")
+    #form data
+    response = requests.post("https://hidden-journey-62459.herokuapp.com/piglatinize/", allow_redirects=False, data=payload)
+    #from the respones, from the response header get the value of the location header
+    print(f"imitate a post request and get response: {response}")
+    print(f"response.headers: {response.headers}")
+    print(f"response.content: {response.content}")
+
+    return response.headers['Location']
+
 
 @app.route('/')
 def home():
-    return "FILL ME!"
+    fact = get_fact().strip()
+    new_web_address = pig_latin_translator(fact)
+    #ew web address shows fact translated with pig lattin
+    return str(new_web_address)
 
 
 if __name__ == "__main__":
